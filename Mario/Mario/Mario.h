@@ -1,65 +1,83 @@
 #pragma once
 class Point2
 {
-  public:
-    Point2() { x = y = 0.0f;} // constructor 1
-    Point2(float xx,float yy) { x = xx; y = yy;} // constructor 2
-    void set(float xx,float yy) { x = xx; y = yy;} 
-    float getX() { return x;}
-    float getY() { return y;}
-    void draw(void) 
-    { 
+public:
+	Point2() { x = y = 0.0f; } // constructor 1
+	Point2(float xx, float yy)
+	{
+		x = xx;
+		y = yy;
+	} // constructor 2
+	void set(float xx, float yy)
+	{
+		x = xx;
+		y = yy;
+	}
+	float getX() { return x; }
+	float getY() { return y; }
+	void draw(void)
+	{
 		glPointSize(2.0);
-		
-		glEnable( GL_BLEND);
-  		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  		glHint( GL_POINT_SMOOTH_HINT, GL_NICEST); 
- 		glEnable( GL_POINT_SMOOTH);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+		glEnable(GL_POINT_SMOOTH);
 
 		glBegin(GL_POINTS); // draw this point
-			glVertex2f((GLfloat)x, (GLfloat)y);
+		glVertex2f((GLfloat)x, (GLfloat)y);
 		glEnd();
 
-		glDisable( GL_POINT_SMOOTH);
+		glDisable(GL_POINT_SMOOTH);
 
-    }// end draw
-  private:
-    float x, y;
+	} // end draw
+private:
+	float x, y;
 }; // end class Point2
-
-
-
 
 class Mario
 {
 public:
-	
 	RGBApixmap pix[5]; // make six empty pixmaps, one for each side of cube
-	enum State	{	STANDING,	RUNNING1, RUNNING2,	RUNNING3,JUMPING,	DIE	}state ;
-	enum ModeType{	STAY,RUN,	R,	JUMP,	DEAD} mode;
-    float pos_X, pos_Y;
-   
-	Mario(Point2 pos)
-		
+	enum State
 	{
-	  pix[0].readBMPFile("MarioStanding.bmp",1);
-	  pix[1].readBMPFile("MarioRun2.bmp",1);  // read texture for side 1 from image
-	  pix[2].readBMPFile("MarioRun1.bmp",1);
-	  pix[3].readBMPFile("MarioRun1.bmp",1);  // read texture for side 1 from image
-	  pix[4].readBMPFile("MarioJump.bmp",1);
+		STANDING,
+		RUNNING1,
+		RUNNING2,
+		RUNNING3,
+		JUMPING,
+		DIE
+	} state;
+	enum ModeType
+	{
+		STAY,
+		RUN,
+		R,
+		JUMP,
+		DEAD
+	} mode;
+	float pos_X, pos_Y;
 
-	  for(int i=0;i<5;i++)
-			pix[i].setChromaKey(192,192,192);
+	Mario(Point2 pos)
 
-	  this->pos_X = pos.getX();
-	  this->pos_Y = pos.getY();
-  
- 
+	{
+		pix[0].readBMPFile("Lenabmp-used-for-testing-purposes-Resolution-320x240-pixels-24-bit-RGB-Size-230454.pbm", 1);
+		pix[1].readBMPFile("MarioRun2.bmp", 1); // read texture for side 1 from image
+		pix[2].readBMPFile("MarioRun1.bmp", 1);
+		pix[3].readBMPFile("MarioRun1.bmp", 1); // read texture for side 1 from image
+		pix[4].readBMPFile("MarioJump.bmp", 1);
+
+		for (int i = 0; i < 5; i++)
+			pix[i].setChromaKey(192, 192, 192);
+
+		this->pos_X = pos.getX();
+		this->pos_Y = pos.getY();
 	};
 	void changePosition(float dx, float dy)
 	{
-		this->pos_X += dx;  this->pos_Y += dy;
+		this->pos_X += dx;
+		this->pos_Y += dy;
 	}
 
 	void render();
@@ -68,21 +86,17 @@ public:
 	void stay();
 	void jump();
 	void die();
-
-
 };
-
-
 
 void Mario::render()
 {
-    
-	switch( mode )
+
+	switch (mode)
 	{
-	
+
 	case STAY:
 
-		glRasterPos2i(this->pos_X,this->pos_Y);
+		glRasterPos2i(this->pos_X, this->pos_Y);
 		pix[0].mDraw();
 		break;
 
@@ -93,28 +107,18 @@ void Mario::render()
 
 	case JUMP:
 
-		
 		break;
 	}
-
 }
-
-
 
 void Mario::run()
 {
-		
-	
-	
-	
-	switch( state )
+
+	switch (state)
 	{
-		
-	
-	
 
 	case RUNNING1:
-	
+
 		state = RUNNING2;
 		break;
 
@@ -124,25 +128,21 @@ void Mario::run()
 		break;
 
 	case RUNNING3:
-			
+
 		state = RUNNING1;
 		break;
-
 	}
-    changePosition(20,0);
-	glRasterPos2i(this->pos_X,this->pos_Y);
+	changePosition(20, 0);
+	glRasterPos2i(this->pos_X, this->pos_Y);
 	pix[state].mDraw();
-	
 }
-
-
 
 void Mario::changeMode(ModeType m)
 {
-	if( mode == m )
+	if (mode == m)
 		return;
 
-	switch( m )
+	switch (m)
 	{
 	case STAY:
 
@@ -150,7 +150,7 @@ void Mario::changeMode(ModeType m)
 		break;
 
 	case RUN:
-		
+
 		state = RUNNING1;
 		break;
 
@@ -158,8 +158,7 @@ void Mario::changeMode(ModeType m)
 
 		state = JUMPING;
 		break;
-
 	}
-		
+
 	mode = m;
 }

@@ -64,7 +64,7 @@ void myDisplay(void)
 	glutSwapBuffers();
 }
 
-int main(int argc, char **argv)
+int main(int argc, char **argv)		
 {
 	glutInit(&argc, argv);						   // Initialize GLUT
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);   // Set display mode
